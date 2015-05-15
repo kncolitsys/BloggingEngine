@@ -1,0 +1,127 @@
+CREATE TABLE [blacklisted_ips](
+	[ipaddress] [varchar](20) NOT NULL,
+	[lastfound] [datetime] NULL,
+CONSTRAINT [PK_blacklisted_ips] PRIMARY KEY CLUSTERED 
+( [ipaddress] ASC) ON [PRIMARY]
+) ON [PRIMARY];
+
+CREATE TABLE [bloglabel](
+	[bloglabelid] [char](35) NOT NULL,
+	[bloglabelname] [varchar](20) NULL,
+	[bloguser] [int] NOT NULL,
+	[valid] [int] NULL CONSTRAINT [DF_bloglabel_valid]  DEFAULT ((1)),
+	[created] [datetime] NULL CONSTRAINT [DF_bloglabel_created]  DEFAULT (getdate()),
+	[lastupdated] [datetime] NULL CONSTRAINT [DF_bloglabel_lastupdated]  DEFAULT (getdate()),
+	[updatedBy] [int] NULL,
+ CONSTRAINT [PK_bloglabel] PRIMARY KEY CLUSTERED 
+([bloglabelid] ASC) ON [PRIMARY]
+) ON [PRIMARY];
+
+CREATE TABLE [blogpost](
+	[blogpostid] [bigint] IDENTITY(1,1) NOT NULL,
+	[blogpostname] [nvarchar](400) NOT NULL,
+	[smalldes] [nvarchar](500) NULL,
+	[url] [nvarchar](160) NULL,
+	[blog] [nvarchar](max) NULL,
+	[comment] [tinyint] NULL,
+	[demourl] [varchar](500) NULL,
+	[bloguser] [int] NOT NULL,
+	[pagetype] [tinyint] NULL,
+	[mblogpostID] [bigint] NULL CONSTRAINT [DF_blogpost_mblogpostID]  DEFAULT ((0)),
+	[pageviews] [bigint] NULL CONSTRAINT [DF_blogpost_views]  DEFAULT ((0)),
+	[sticky] [bit] NULL CONSTRAINT [DF_blogpost_sticky]  DEFAULT ((0)),
+	[orderby] [int] NULL,
+	[valid] [bit] NULL CONSTRAINT [DF_blogpost_valid]  DEFAULT ((0)),
+	[created] [datetime] NULL CONSTRAINT [DF_blogpost_created]  DEFAULT (getdate()),
+	[lastupdated] [datetime] NULL CONSTRAINT [DF_blogpost_lastupdated]  DEFAULT (getdate()),
+	[updatedBy] [int] NULL,
+	[publisheddate] [datetime] NULL,
+ CONSTRAINT [PK_blogpost] PRIMARY KEY CLUSTERED 
+([blogpostid] ASC) ON [PRIMARY]
+) ON [PRIMARY];			
+CREATE INDEX "blogpost_ix_created" ON blogpost ("created");
+CREATE INDEX "blogpost_ix_pagetype" ON blogpost ("pagetype");
+CREATE INDEX "blogpost_ix_valid" ON blogpost ("valid");
+
+CREATE TABLE [blogpost_bloglabel](
+	[blogpostid] [bigint] NOT NULL,
+	[bloglabelid] [char](35) NOT NULL,
+ CONSTRAINT [PK_blogpost_bloglabel] PRIMARY KEY CLUSTERED 
+([blogpostid] ASC, [bloglabelid] ASC) ON [PRIMARY]
+) ON [PRIMARY];
+
+CREATE TABLE [bloguser](
+	[bloguserid] [int] IDENTITY(1,1) NOT NULL,
+	[blogusername] [nvarchar](20) NOT NULL,
+	[username] [nvarchar](20) NOT NULL,
+	[email] [nvarchar](40) NOT NULL,
+	[password] [nvarchar](64) NOT NULL,
+	[salt] [nvarchar](35) NOT NULL,
+	[description] [nvarchar](500) NULL,
+	[retrycount] [tinyint] NULL CONSTRAINT [DF_bloguser_retrycount]  DEFAULT ((0)),
+	[unlockkey] [nvarchar](64) NULL,
+	[cookiekey] [char](35) NOT NULL,
+	[valid] [bit] NULL CONSTRAINT [DF_bloguser_valid]  DEFAULT ((1)),
+	[createdate] [datetime] NULL CONSTRAINT [DF_bloguser_createdate]  DEFAULT (getdate()),
+	[lastupdated] [datetime] NULL CONSTRAINT [DF_bloguser_lastupdated]  DEFAULT (getdate()),
+	[createdBy] [int] NULL,
+	[updatedBy] [int] NULL,
+CONSTRAINT [PK_bloguser] PRIMARY KEY CLUSTERED 
+( [bloguserid] ASC ) ON [PRIMARY]
+) ON [PRIMARY];
+
+CREATE TABLE [comments](
+	[commentid] [char](35) NOT NULL,
+	[blogpostid] [int] NULL,
+	[mcommentid] [char](35) NULL,
+	[comments] [nvarchar](max) NULL,
+	[name] [nvarchar](50) NULL,
+	[email] [nvarchar](50) NULL,
+	[website] [nvarchar](100) NULL,
+	[created] [datetime] NULL CONSTRAINT [DF_comments_created]  DEFAULT (getdate()),
+	[valid] [bit] NULL CONSTRAINT [DF_comments_valid]  DEFAULT ((1)),
+	[publish] [tinyint] NULL,
+	[uid] [char](35) NULL,
+	[subscribe] [bit] NULL,
+	[followup] [bit] NULL,
+	[ipaddress] [varchar](20) NULL,
+CONSTRAINT [PK_comments] PRIMARY KEY CLUSTERED 
+( [commentid] ASC) ON [PRIMARY]
+) ON [PRIMARY];
+CREATE INDEX comments_ix_uid ON comments (uid);
+
+CREATE TABLE [downloadcount](
+	[downloadcountid] [char](35) NOT NULL,
+	[blogpostid] [int] NULL,
+	[filename] [nvarchar](50) NULL,
+	[downloads] [int] NULL,
+CONSTRAINT [PK_downloadcount] PRIMARY KEY CLUSTERED 
+([downloadcountid] ASC) ON [PRIMARY]
+) ON [PRIMARY];
+CREATE INDEX downloadcount_ix_filename ON downloadcount (filename);
+
+CREATE TABLE [externallink](
+	[externallinkID] [char](35) NOT NULL,
+	[blogpostID] [bigint] NULL,
+	[externallinkName] [nvarchar](500) NULL,
+	[externallinkURL] [nvarchar](500) NULL,
+	[valid] [bit] NULL CONSTRAINT [DF_externallink_valid]  DEFAULT ((1)),
+	[created] [datetime] NULL CONSTRAINT [DF_externallink_created]  DEFAULT (getdate()),
+	[lastupdated] [datetime] NULL CONSTRAINT [DF_externallink_lastupdated]  DEFAULT (getdate()),
+	[updatedBy] [int] NULL,
+CONSTRAINT [PK_externallink] PRIMARY KEY CLUSTERED 
+([externallinkID] ASC) ON [PRIMARY]
+) ON [PRIMARY];
+
+CREATE TABLE [links](
+	[LinksId] [char](35) NOT NULL,
+	[LinksName] [nvarchar](100) NULL,
+	[Link] [nvarchar](500) NULL,
+	[note] [nvarchar](100) NULL,
+	[DisplayOrder] [tinyint] NULL,
+	[created] [datetime] NULL CONSTRAINT [DF_Links_created]  DEFAULT (getdate()),
+	[lastupdated] [datetime] NULL CONSTRAINT [DF_Links_lastupdated]  DEFAULT (getdate()),
+	[updatedBy] [int] NULL,
+	[valid] [bit] NULL CONSTRAINT [DF_Links_valid]  DEFAULT ((1)),
+CONSTRAINT [PK_Links] PRIMARY KEY CLUSTERED 
+([LinksId] ASC) ON [PRIMARY] ) ON [PRIMARY];

@@ -1,0 +1,2 @@
+<cfinclude template="settings/Wishlist.cfm"><cfif len(widget.amazonurl)><cfoutput><a href="#widget.amazonurl#"><img src="#application.root##application.warehouse#/widgets/images/wishlist.png" /></a></cfoutput>
+<br /><br /></cfif>

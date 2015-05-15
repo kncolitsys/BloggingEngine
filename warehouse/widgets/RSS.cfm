@@ -1,0 +1,2 @@
+<cfinclude template="settings/RSS.cfm">
+<ul class="buttonset" id="RSSWidget"><li><cfoutput><a href="#application.root#rss.xml"><img border="0" src="#application.root#styles/#Application.sti.layout#/images/rss.png" alt="rss" /></a></cfoutput></li></ul>

@@ -1,0 +1,12 @@
+html,body 			{margin:0; padding:0; height:100%; color:#333; font-family:Verdana; font-size:11px}
+#header				{background-image:url(images/headebg.png);}
+.formblock			{padding:10px; margin:10px}
+.divider			{background-color:#fff; border:0px; border-bottom:1px dotted #CCC;  padding-top:5px; padding-bottom:5px}
+input				{font-family:Verdana; font-size:11px}
+.settingitem		{border-bottom:1px solid #F0F0F0; padding:5px; clear:both }
+.button				{font:Verdana, Geneva, sans-serif; cursor:pointer; font-weight:bold; font-size:11px; width:100px !important; background-image:url(images/grybtnbg.gif); background-position:top; background-color: transparent; margin:0px; vertical-align: middle; padding-right:5px; padding-left:0px; padding-top:0px; padding-bottom:0px; border:0px; height:18px}
+.accordinghead		{background-color:#E8E8E8; clear:both; background-image:url(images/stripbg.png); padding:5px; font-weight:bold; border:1px solid #CCC; margin:2px}
+.label				{float:left; width:150px}
+.item				{clear:right}
+.bigbox				{overflow-y:auto;  font-family:Georgia, 'Times New Roman', Times, serif; font-size:14px}
+.bigbox	a			{text-decoration:none}

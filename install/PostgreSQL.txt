@@ -1,0 +1,116 @@
+DROP TABLE IF EXISTS "blacklisted_ips";
+CREATE TABLE "blacklisted_ips" (
+"ipaddress" varchar(20) NOT NULL PRIMARY KEY,
+"lastfound" timestamp(6));
+
+DROP TABLE IF EXISTS "bloglabel";
+CREATE TABLE "bloglabel" (
+"bloglabelid" char(35) NOT NULL PRIMARY KEY,
+"bloglabelname" varchar(20),
+"bloguser" int4 NOT NULL,
+"created" timestamp(6) DEFAULT now(),
+"lastupdated" timestamp(6) DEFAULT now(),
+"updatedby" int4,
+"valid" bool DEFAULT true);
+
+DROP TABLE IF EXISTS "blogpost";
+DROP SEQUENCE IF EXISTS "blogpost_seq";
+CREATE SEQUENCE "blogpost_seq";
+CREATE TABLE "blogpost" (
+"blogpostid" int8 NOT NULL PRIMARY KEY DEFAULT nextval('blogpost_seq'),
+"blogpostname" varchar(400) NOT NULL,
+"smalldes" varchar(500),
+"url" varchar(160),
+"blog" text,
+"comment" numeric(3),
+"demourl" varchar(500),
+"bloguser" int4 NOT NULL,
+"pagetype" numeric,
+"pageviews" int8 DEFAULT 0,
+"sticky" bool DEFAULT false,
+"orderby" int4,
+"valid" bool DEFAULT false,
+"created" timestamp(6) DEFAULT now(),
+"lastupdated" timestamp(6) DEFAULT now(),
+"updatedby" int4,
+"publisheddate" timestamp(6),
+"mblogpostid" int8);
+COMMENT ON COLUMN "blogpost"."pagetype" IS '1 = blogpost, 2 = pages';
+CREATE INDEX "blogpost_ix_created" ON "blogpost" USING btree ("created");
+CREATE INDEX "blogpost_ix_pagetype" ON "blogpost" USING btree ("pagetype");
+CREATE INDEX "blogpost_ix_valid" ON "blogpost" USING btree ("valid");
+
+DROP TABLE IF EXISTS "blogpost_bloglabel";
+CREATE TABLE "blogpost_bloglabel" (
+"blogpostid" int8 NOT NULL,
+"bloglabelid" char(35) NOT NULL);
+ALTER TABLE "blogpost_bloglabel" ADD PRIMARY KEY ("blogpostid", "bloglabelid");
+
+DROP TABLE IF EXISTS "bloguser";
+DROP SEQUENCE IF EXISTS "bloguser_seq";
+CREATE SEQUENCE "bloguser_seq";
+CREATE TABLE "bloguser" (
+"bloguserid" int4 NOT NULL PRIMARY KEY DEFAULT nextval('bloguser_seq'),
+"blogusername" varchar(20) NOT NULL,
+"username" varchar(20) NOT NULL,
+"email" varchar(40) NOT NULL,
+"password" varchar(64) NOT NULL,
+"salt" varchar(35) NOT NULL,
+"description" varchar(500),
+"retrycount" numeric(3) DEFAULT 0,
+"unlockkey" varchar(64),
+"cookiekey" char(35),
+"valid" bool DEFAULT true,
+"createdate" timestamp(6) DEFAULT now(),
+"lastupdated" timestamp(6) DEFAULT now(),
+"createdby" int4,
+"updatedby" int4);
+
+DROP TABLE IF EXISTS "comments";
+CREATE TABLE "comments" (
+"commentid" char(35) NOT NULL PRIMARY KEY,
+"blogpostid" int4,
+"mcommentid" char(35),
+"comments" text,
+"name" varchar(50),
+"email" varchar(50),
+"website" varchar(100),
+"created" timestamp(6) DEFAULT now(),
+"valid" bool DEFAULT true,
+"publish" numeric(3),
+"uid" char(35),
+"subscribe" bool,
+"followup" bool,
+"ipaddress" varchar(20));
+CREATE INDEX "comments_ix_uid" ON "comments" USING btree ("uid");
+
+DROP TABLE IF EXISTS "downloadcount";
+CREATE TABLE "downloadcount" (
+"downloadcountid" char(35) NOT NULL PRIMARY KEY,
+"blogpostid" int4,
+"filename" varchar(50),
+"downloads" int4);
+CREATE INDEX "downloadcount_ix_filename" ON "downloadcount" USING btree ("filename");
+
+DROP TABLE IF EXISTS "externallink";
+CREATE TABLE "externallink" (
+"externallinkid" char(35) NOT NULL PRIMARY KEY,
+"blogpostid" int8,
+"externallinkname" varchar(500),
+"externallinkurl" varchar(500),
+"valid" bool DEFAULT true,
+"created" timestamp(6) DEFAULT now(),
+"lastupdated" timestamp(6) DEFAULT now(),
+"updatedby" int4);
+
+DROP TABLE IF EXISTS "links";
+CREATE TABLE "links" (
+"linksid" char(35) NOT NULL PRIMARY KEY,
+"linksname" varchar(100),
+"link" varchar(500),
+"note" varchar(100),
+"displayorder" numeric(3),
+"created" timestamp(6) DEFAULT now(),
+"lastupdated" timestamp(6) DEFAULT now(),
+"updatedby" int4,
+"valid" bool DEFAULT true);
